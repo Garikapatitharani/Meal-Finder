@@ -35,23 +35,27 @@ fetch("https://www.themealdb.com/api/json/v1/1/categories.php")
       const card = document.createElement('div');
       card.className = 'category-card';
       card.innerHTML = `
+      <div class="category-image-wrapper">
         <img src="${cat.strCategoryThumb}" alt="${cat.strCategory}">
-        <h4>${cat.strCategory}</h4>
+        <span class="category-name-overlay">${cat.strCategory}</span>
+      </div>
       `;
 
       card.addEventListener('click', () => {
-  const categoryName = cat.strCategory;
-  const categoryDesc = cat.strCategoryDescription;
+        fetchMealsWithDescription(cat.strCategory);
+        
+        const categoryName = cat.strCategory;
+        const categoryDesc = cat.strCategoryDescription;
 
-  fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`)
-    .then(res => res.json())
-    .then(data => {
-      mealContainer.innerHTML = '';
-      categoryTitle.textContent = categoryName;
-      categoryDescription.textContent = categoryDesc;
-      categoryInfo.style.display = 'block';
+        fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`)
+          .then(res => res.json())
+          .then(data => {
+            mealContainer.innerHTML = '';
+          categoryTitle.textContent = categoryName;
+          categoryDescription.textContent = categoryDesc;
+          categoryInfo.style.display = 'block';
 
-      if (data.meals && data.meals.length > 0) {
+        if (data.meals && data.meals.length > 0) {
         const meals = data.meals;
 
         meals.forEach(meal => {

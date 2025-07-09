@@ -227,6 +227,10 @@ button, select {
   cursor: pointer;
   transition: transform 0.3s;
   text-align: center;
+  position: relative;
+  width: 200px;
+  margin: 10px;
+  overflow: hidden;
 }
 
 .category-card:hover {
@@ -244,6 +248,30 @@ button, select {
   margin-top: 10px;
   font-size: 16px;
   color: #e44e29;
+}
+
+.category-image-wrapper {
+  position: relative;
+}
+
+.category-image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+.category-name-overlay {
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  background: rgba(228, 78, 41, 0.9); /* orange semi-transparent */
+  color: white;
+  padding: 4px 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 .category-info-section {
