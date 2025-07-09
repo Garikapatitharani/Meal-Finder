@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Meal Finder</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+  <div class="container">
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo" id="home-link">🍽️ MEAL FINDER</div>
+  <button class="toggle-btn" id="toggle-btn">☰</button>
+</nav>
+
+
+<!-- Toggle Sidebar -->
+<div id="sidebar" class="sidebar hidden">
+  <button class="close-btn" id="close-sidebar"><i class="fa-regular fa-circle-xmark"></i></button>
+  <h3>Categories</h3>
+  <ul id="sidebar-categories" class="sidebar-categories"></ul>
+</div>
+
+<!-- image -->
+<section class="hero" style="background-image: url('./picture.jpg'); background-size: cover; background-position: center; height: 500px;">
+  <div class="hero-overlay">
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search recipes here...">
+        <button id="search-btn"><i class="fas fa-search" style="color: black;"></i></button>
+      </div>
+    </div>
+    <h2 class="h2">What are your favorite cuisines?</h2>
+    <p class="p">PERSONALIZE YOUR EXPERIENCE</p>
+  </div>
+</section>
+
+
+<div id="category-info" class="category-info-section" style="display: none;">
+  <h2 id="category-title"></h2>
+  <p id="category-description"></p>
+</div>
+   <div id="meal-container" class="meal-container"></div>
+  </div>
+
+<!-- Meal Detail Page -->
+<div id="meal-detail-page" class="hidden">
+
+  <div class="meal-detail-content">
+    <div class="left-side">
+      <img id="meal-image" alt="Meal Image" class="detail-image">
+    </div>
+    <div class="right-side">
+      <div class="meal-info-header">
+         <h2 id="meal-title"></h2>
+        <p><strong>Category:</strong> <span id="meal-category"></span></p>
+      </div>
+      <div class="extra-info">
+        <div id="meal-tags"></div>
+        <div id="meal-source"></div>
+      </div>
+      <div class="ingredients-box" id="meal-ingredients">
+        <h4>Ingredients:</h4>
+        <div id="ingredients-list"></div>
+      </div>
+    </div>
+  </div>
+
+<div id="measurement-list" class="measurements-box"></div>
+
+  <div class="instructions-box">
+    <h4>Instructions:</h4>
+    <div id="instructions-list"></div>
+  </div>
+</div>
+
+<!-- All Categories Section -->
+<section id="all-categories" class="all-categories-section">
+  <h2 class="category-heading">Categories</h2>
+  <div id="category-cards" class="category-card-container"></div>
+</section>
+
+  <script src="script.js"></script>
+</body>
+</html>
