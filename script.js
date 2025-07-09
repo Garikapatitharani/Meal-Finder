@@ -26,74 +26,73 @@ fetch("https://www.themealdb.com/api/json/v1/1/categories.php")
       sidebarCategories.appendChild(li);
 
       li.addEventListener('click', () => {
-        fetchMealsWithDescription(cat.strCategory);
-        sidebar.classList.add('hidden');
-        document.getElementById('all-categories').style.display = 'none';
+        const categoryName = cat.strCategory;
+        const categoryDesc = cat.strCategoryDescription;
+
+        // Show category description
+        categoryTitle.textContent = categoryName;
+        categoryDescription.textContent = categoryDesc;
+        categoryInfo.style.display = 'block';
+
+        // Fetch meals
+        fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`)
+          .then(res => res.json())
+          .then(data => {
+            mealContainer.innerHTML = '';
+
+            if (data.meals) {
+              data.meals.forEach(meal => {
+                const mealCard = document.createElement('div');
+                mealCard.className = 'meal-card';
+
+                const mealImg = document.createElement('img');
+                mealImg.src = meal.strMealThumb;
+                mealImg.alt = meal.strMeal;
+                mealImg.classList.add('clickable-image');
+
+                mealImg.addEventListener('click', () => {
+                  getMealDetails(meal.idMeal);
+                });
+
+                const mealTitle = document.createElement('h3');
+                mealTitle.textContent = meal.strMeal;
+
+                mealCard.appendChild(mealImg);
+                mealCard.appendChild(mealTitle);
+                mealContainer.appendChild(mealCard);
+              });
+            } else {
+              mealContainer.innerHTML = '<p>No meals found for this category.</p>';
+            }
+
+            // Show meals + all categories
+            mealContainer.style.display = 'flex';
+            categoryInfo.style.display = 'block';
+            document.querySelector('.hero').style.display = 'none';
+            document.getElementById('meal-detail-page').classList.add('hidden');
+            document.getElementById('all-categories').style.display = 'block';
+            sidebar.classList.add('hidden');
+          });
       });
 
       // Main category card
       const card = document.createElement('div');
       card.className = 'category-card';
       card.innerHTML = `
-      <div class="category-image-wrapper">
-        <img src="${cat.strCategoryThumb}" alt="${cat.strCategory}">
-        <span class="category-name-overlay">${cat.strCategory}</span>
-      </div>
+        <div class="category-image-wrapper">
+          <img src="${cat.strCategoryThumb}" alt="${cat.strCategory}">
+          <span class="category-name-overlay">${cat.strCategory}</span>
+        </div>
       `;
 
       card.addEventListener('click', () => {
         fetchMealsWithDescription(cat.strCategory);
-        
-        const categoryName = cat.strCategory;
-        const categoryDesc = cat.strCategoryDescription;
+      });
 
-        fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`)
-          .then(res => res.json())
-          .then(data => {
-            mealContainer.innerHTML = '';
-          categoryTitle.textContent = categoryName;
-          categoryDescription.textContent = categoryDesc;
-          categoryInfo.style.display = 'block';
-
-        if (data.meals && data.meals.length > 0) {
-        const meals = data.meals;
-
-        meals.forEach(meal => {
-          const mealCard = document.createElement('div');
-          mealCard.className = 'meal-card';
-
-          const mealImg = document.createElement('img');
-          mealImg.src = meal.strMealThumb;
-          mealImg.alt = meal.strMeal;
-          mealImg.classList.add('clickable-image');
-
-          mealImg.addEventListener('click', () => {
-            getMealDetails(meal.idMeal);
-          });
-
-          const mealTitle = document.createElement('h3');
-          mealTitle.textContent = meal.strMeal;
-
-          mealCard.appendChild(mealImg);
-          mealCard.appendChild(mealTitle);
-          mealContainer.appendChild(mealCard);
-        });
-      } else {
-        mealContainer.innerHTML = '<p>No meals found for this category.</p>';
-      }
-
-      // ✅ Show meals section
-      mealContainer.style.display = 'flex';
-      document.querySelector('.hero').style.display = 'none';
-      document.getElementById('meal-detail-page').classList.add('hidden');
-      document.getElementById('all-categories').style.display = 'block';
-    });
-});
       categoryCards.appendChild(card);
     });
   });
 
-  
 // === 2. Sidebar Toggle ===
 const toggleBtn = document.getElementById('toggle-btn');
 const closeSidebar = document.getElementById('close-sidebar');
@@ -111,7 +110,7 @@ searchBtn.addEventListener('click', () => {
   const searchValue = searchInput.value.trim();
   if (searchValue) {
     categoryInfo.style.display = 'none';
-      document.getElementById('all-categories').style.display = 'block';
+    document.getElementById('all-categories').style.display = 'block';
     fetchMeals(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchValue}`);
   }
 });
@@ -174,23 +173,23 @@ function getMealDetails(id) {
 
       document.getElementById("meal-title").textContent = meal.strMeal;
       document.getElementById("meal-category").textContent = meal.strCategory;
-          // Tags
+
       const mealTags = document.getElementById("meal-tags");
       if (meal.strTags) {
-         mealTags.style.display = 'block';
-         mealTags.textContent = `Tags: ${meal.strTags}`;
+        mealTags.style.display = 'block';
+        mealTags.textContent = `Tags: ${meal.strTags}`;
       } else {
-         mealTags.style.display = 'none';
+        mealTags.style.display = 'none';
       }
 
-        // Source
       const mealSource = document.getElementById("meal-source");
       if (meal.strSource) {
-         mealSource.style.display = 'block';
-         mealSource.innerHTML = `Source: <a href="${meal.strSource}" target="_blank">${meal.strSource}</a>`;
+        mealSource.style.display = 'block';
+        mealSource.innerHTML = `Source: <a href="${meal.strSource}" target="_blank">${meal.strSource}</a>`;
       } else {
-         mealSource.style.display = 'none';
+        mealSource.style.display = 'none';
       }
+
       document.getElementById("meal-image").src = meal.strMealThumb;
       document.getElementById("meal-image").alt = meal.strMeal;
 
@@ -198,26 +197,24 @@ function getMealDetails(id) {
       ingredientsList.innerHTML = '';
       for (let i = 1; i <= 20; i++) {
         const ing = meal[`strIngredient${i}`];
-        const meas = meal[`strMeasure${i}`];
         if (ing && ing.trim()) {
           const div = document.createElement("div");
           div.classList.add('ingredient-item');
-          div.textContent=ing;
+          div.textContent = ing;
           ingredientsList.appendChild(div);
         }
       }
 
       const measurementList = document.getElementById("measurement-list");
       measurementList.innerHTML = "<h4>Measurements:</h4>";
-
       for (let i = 1; i <= 20; i++) {
-       const ing = meal[`strIngredient${i}`];
-       const meas = meal[`strMeasure${i}`];
-      if (ing && ing.trim() && meas && meas.trim()) {
-        const item = document.createElement("div");
-        item.innerHTML = `<span class="orange-symbol">🔶</span> ${meas.trim()} - ${ing.trim()}`;
-         measurementList.appendChild(item);
-       }
+        const ing = meal[`strIngredient${i}`];
+        const meas = meal[`strMeasure${i}`];
+        if (ing && ing.trim() && meas && meas.trim()) {
+          const item = document.createElement("div");
+          item.innerHTML = `<span class="orange-symbol">🔶</span> ${meas.trim()} - ${ing.trim()}`;
+          measurementList.appendChild(item);
+        }
       }
 
       const instructionsList = document.getElementById("instructions-list");
